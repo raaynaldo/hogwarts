@@ -1,14 +1,15 @@
 import React, { Component } from "react";
+import HogDetail from './HogDetail'
 
 class HogTile extends Component {
   state = {
-    active: "non-active",
+    active: false,
     divClass: "four wide column",
   };
 
   changeDisplay = () => {
     this.setState({
-      active: "",
+      active: !this.state.active,
     });
   };
 
@@ -32,19 +33,7 @@ class HogTile extends Component {
             <button onClick={() => this.hideHog()}>hide hog</button>
             <button onClick={() => this.changeDisplay()}>read more</button>
           </div>
-          <div className={`content ${this.state.active}`}>
-            <a className="header">{this.props.hog.name}</a>
-            <div className="meta">
-              <span className="weight"> Weight: {this.props.hog.weight}</span>
-            </div>
-            <div className="specialty">{this.props.hog.specialty}</div>
-            <div className="greased">
-              {this.props.hog.greased ? "greased" : "ungreased"}
-            </div>
-            <div className="medal-achieved">
-              {this.props.hog["highest medal achieved"]}
-            </div>
-          </div>
+          {this.state.active ? <HogDetail hog={this.props.hog} /> : null}
         </div>
       </div>
     );
