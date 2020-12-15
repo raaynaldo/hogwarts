@@ -10,16 +10,39 @@ class App extends Component {
     this.state = {
       filter: "all",
       sort: "name",
-      hogs: hogs,
+      hogs: [],
     };
   }
 
+  componentDidMount() {
+    this.fetchData();
+  }
+
   fetchData = () => {
-    //filter and sort
-    console.log("fetch works!")
     let newHogs = hogs;
     if (this.state.filter !== "all") {
-      newHogs = newHogs.filter((hog) => hog.greased == this.state.filter);
+      newHogs = newHogs.filter(
+        (hog) => hog.greased.toString() === this.state.filter
+      );
+    }
+
+    if (this.state.sort === "weight") {
+      newHogs = newHogs.sort(function (a, b) {
+        return a.weight - b.weight;
+      });
+    } else if (this.state.sort === "name") {
+      newHogs = newHogs.sort(function (a, b) {
+        const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        return 0;
+      });
     }
 
     this.setState({
@@ -28,18 +51,21 @@ class App extends Component {
   };
 
   filterHandler = (filterBy) => {
-    this.setState({
-      filter: filterBy,
-    }, this.fetchData());
-
-    console.log("filter.works!")
-    this.fetchData()
+    this.setState(
+      {
+        filter: filterBy,
+      },
+      () => this.fetchData()
+    );
   };
 
   sortHandler = (sortBy) => {
-    this.setState({
-      sort: sortBy,
-    });
+    this.setState(
+      {
+        sort: sortBy,
+      },
+      () => this.fetchData()
+    );
   };
 
   render() {

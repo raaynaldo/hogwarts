@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import HogTile from './HogTile.js'
+import HogTile from "./HogTile.js";
 
 class HogContainer extends Component {
   render() {
     return (
       <div className="ui grid container">
-        <span>&nbsp;
-            <HogTile hogs={this.props.hogs}/>
-        </span>
+        {this.props.hogs.map((hog, id) => {
+          return <HogTile hog={hog} key={id} />;
+        })}
       </div>
     );
   }
